@@ -18,17 +18,44 @@ export default function EditMemeModal({ isOpen, onOpenChange, meme, onSave }) {
   const [memeImage, setMemeImage] = useState(image);
   const [memeLikes, setMemeLikes] = useState(likes);
 
+  const [imageError, setImageError] = useState('');
+
   useEffect(() => {
     setMemeName(name);
     setMemeImage(image);
     setMemeLikes(likes);
+    setImageError('');
   }, [meme, isOpen]);
+
+  const isValidUrl = (str) => {
+    try {
+      const url = new URL(str);
+      return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch {
+      return false;
+    }
+  };
+
+  const validateImage = (url) => {
+    if (!isValidUrl(url)) {
+      setImageError('Enter a valid URL');
+    } else if (!url.toLowerCase().endsWith('.jpg')) {
+      setImageError('Image URL must end with .jpg');
+    } else {
+      setImageError('');
+    }
+  };
 
   const onSaveMeme = () => {
     const trimmedName = memeName.trim();
     const trimmedImage = memeImage.trim();
 
     if (!trimmedName || !trimmedImage || memeLikes === '') {
+      return;
+    }
+
+    validateImage(trimmedImage);
+    if (imageError) {
       return;
     }
 
@@ -43,7 +70,7 @@ export default function EditMemeModal({ isOpen, onOpenChange, meme, onSave }) {
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+    <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="sm">
       <ModalContent>
         {(onClose) => (
           <>
@@ -66,10 +93,16 @@ export default function EditMemeModal({ isOpen, onOpenChange, meme, onSave }) {
                   id="image"
                   label="Image URL"
                   labelPlacement="outside"
-                  type="url"
+                  type="text"
                   value={memeImage}
-                  onChange={(e) => setMemeImage(e.target.value)}
+                  onChange={(e) => {
+                    setMemeImage(e.target.value);
+                    setImageError('');
+                  }}
+                  onBlur={() => validateImage(memeImage)}
                   placeholder="Enter image URL"
+                  isInvalid={!!imageError}
+                  errorMessage={imageError}
                 />
                 <Input
                   isRequired
