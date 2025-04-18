@@ -10,8 +10,6 @@ import {
   TableHeader,
   TableRow,
 } from '@heroui/react';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
 
 import Loader from './Loader.jsx';
 import ErrorMessage from './ErrorMessage.jsx';
@@ -23,26 +21,7 @@ const columns = [
   { key: 'actions', label: 'ACTIONS' },
 ];
 
-export default function MemesTable() {
-  const [memes, setMemes] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchMemes = async () => {
-      try {
-        const { data } = await axios.get('/api/memes/load');
-        setMemes(data.memes);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMemes();
-  }, []);
-
+export default function MemesTable({ onEdit, memes, loading, error }) {
   if (error) return <ErrorMessage>Error: {error}</ErrorMessage>;
 
   return loading ? (
@@ -61,7 +40,7 @@ export default function MemesTable() {
                   <Button
                     color="default"
                     size="sm"
-                    // onPress={() => console.log('Action for', item)}
+                    onPress={() => onEdit(item)}
                   >
                     Edit
                   </Button>
