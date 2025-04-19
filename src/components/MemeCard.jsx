@@ -12,7 +12,11 @@ import NextImage from 'next/image';
 
 export default function MemeCard({ meme }) {
   return (
-    <Card key={meme.id} shadow="sm">
+    <Card
+      key={meme.id}
+      shadow="sm"
+      className="h-full flex flex-col justify-between"
+    >
       <CardBody className="overflow-visible p-0">
         <Image
           alt={meme.name}

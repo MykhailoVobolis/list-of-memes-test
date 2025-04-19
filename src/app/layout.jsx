@@ -1,6 +1,6 @@
 import React from 'react';
-import NavBar from '@/components/NavBar.jsx';
 import Providers from './providers.jsx';
+import NavBar from '@/components/NavBar.jsx';
 
 import './globals.css';
 
