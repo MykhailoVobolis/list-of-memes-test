@@ -17,19 +17,23 @@ export default function Home() {
   const { memes, setMemes } = useMemes();
 
   useEffect(() => {
-    const fetchMemes = async () => {
-      try {
-        const { data } = await axios.get('/api/memes/load');
-        setMemes(data.memes);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!memes || memes.length === 0) {
+      const fetchMemes = async () => {
+        try {
+          const { data } = await axios.get('/api/memes/load');
+          setMemes(data.memes);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      };
 
-    fetchMemes();
-  }, []);
+      fetchMemes();
+    } else {
+      setLoading(false);
+    }
+  }, [memes, setMemes]);
 
   const handleEdit = (meme) => {
     setSelectedMeme(meme);

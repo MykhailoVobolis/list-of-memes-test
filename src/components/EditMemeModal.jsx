@@ -70,12 +70,17 @@ export default function EditMemeModal({ isOpen, onOpenChange, meme, onSave }) {
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="sm">
+    <Modal
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      size="sm"
+      placement="center"
+    >
       <ModalContent>
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              You can change the values
+              You can correct the values
             </ModalHeader>
             <ModalBody>
               <div className="space-y-10">
